@@ -1,0 +1,11 @@
+%% Goal :main program,Sample measurement
+ 
+load('T')%Load the resulting system parameter results
+%% Target:Dynamic samples ,Compute measurement noise contrast,the dynamic fraction,the flow speckle contrast,the decorrelation time
+I_sample1 = read_raw('sample_path');%%Dynamic Image Path
+    I_sample1 =(I_sample1(y1:y2,x1:x2,:))%%Determine the image range
+    [ks ks2 kt kt2] = estimate_K(I_sample,nd,Nd);%%Determine Speckle contrast K^{2}
+    [row,row2] = estimate_Row(I_sample,nd,beta,Nd);%%Determine the dynamic fraction, ρ
+    [vnoise1 vnoise2]=estimate_Noise(I_sample,nd,vard,gamma,Nd,p);%%Compute measurement noise contrast，κ_{noise}^{2}
+    [Kfs Kft]=	estimate_Kf(ks2,kt2,vnoise1,vnoise2,beta,row,row2);%%Compute the flow speckle contrast ，Kf^{2}
+x1 = tc(kfs,beta,row,T);x2 = tc(kfT,beta,row,T)%%Determine the decorrelation time,τ_{c}(spatial ,temporal)
