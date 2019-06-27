@@ -5,7 +5,7 @@ Nd = 7;%% pixel window
 [nd, vard] = estimate_darkcurrent(I,Nd);%% camera dark current and its variance
 
 %% Target:relection standard ,Determine the system noise characteristics and the coherence factor
+%sample_path is a collection of data paths,which can be observed from 'estimate_var'.
 p = estimate_var(nd,vard,Nd,sample_path);%%Determine the noise parameters of the whole system 
-%sample_path is a collection of data paths
 [beta] = estimate_Beta(I_static, nd, vard,Nd);%%Determine the coherence factor, β
 save('T');%Save the resulting system parameter results
