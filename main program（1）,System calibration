@@ -10,5 +10,5 @@ for number =1:n
  sample_path = ['G:\LSI\' num2str(number) '\'];
  end
 p = estimate_var(nd,vard,Nd,sample_path);%%Determine the noise parameters of the whole system 
-[beta] = estimate_Beta(I_static, nd, vard,Nd);%%Determine the coherence factor, β
+[beta] = estimate_Beta(sample_path, nd, vard,Nd);%%Determine the coherence factor, β
 save('T');%Save the resulting system parameter results
