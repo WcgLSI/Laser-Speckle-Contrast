@@ -6,4 +6,5 @@ Main program（2）,Sample measurement is to measure a true flow speckle contras
 The two programs are independent of each other. The data of the first program can be read into the second program, or the parameters of the second program can be set by itself.
 In the program, there is a program to read data in raw format. If the data is in other formats, it will replace the program with the corresponding format.
 This program is a data demodulation method. If multiple data are needed, add loop structure on this basis.
-
+picture2 is schematic of the experimental setup which is a sample that can be modified to fit oneself。
+picture 'procedure' outlines the complete procedure of system calibration, sample measurement, noise correction, and static scattering removal for robust quantitative single-exposure laser speckle imaging.
