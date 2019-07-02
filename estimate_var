@@ -5,7 +5,7 @@ function p = estimate_var(nd,vard,Nd,sample_path)
 for number =1:n
     number
     sample_path1 = sample_path(number);
-    I_static1 = read_raw(sample_path);%%Read Data
+    I_static1 = read_raw(sample_path1);%%Read Data
     I_static2 = I_static1([y1:y2 x1:x2]);% Determination area
 %% invoke function of ‘estimate_var2’
     [varc,varc2_c] = estimate_var2(I_static2(:,:,:), nd, vard, Nd);%Obtain variance 
