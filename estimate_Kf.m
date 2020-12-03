@@ -1,10 +1,13 @@
-%% Goal :Compute the flow speckle contrast ÔºåKf^{2}
-
-function [Kfs Kft]=estimate_Kf(ks2,kt2,vnoise1,vnoise2,beta,row,row2)
-%% vnoise1(Œ∫_{noise}^{2} in temporal) ,vnoise2(Œ∫_{noise}^{2} in spatial) 
-%% beta (the coherence factor, Œ≤),row (the dynamic fraction, œÅ),row2 ((1-œÅ)^{2})
+%% Goal :Compute the flow speckle contrast £¨Kf^{2}
+function [Kfs, Kft]=estimate_Kf(ks2,kt2,vnoise1,vnoise2,beta,row,row2)
+%% vnoise1(¶ _{noise}^{2} in temporal) ,vnoise2(¶ _{noise}^{2} in spatial) 
+%% beta (the coherence factor, ¶¬),row (the dynamic fraction, ¶—),row2 ((1-¶—)^{2})
   %%  Kf(temporal) 
-        Kft = (kt2- vnoise1)./row.^2;
+        Kft = (kt2 - vnoise1)./row.^2;
+        Kft(Kft<0) = 0;
+        Kft=mean(Kft(:));
     %%  Kf(spatial)
-Kfs = (ks2- vnoise1-beta.*row2)./row.^2;
+Kfs = (ks2 - vnoise2 - beta.*row2)./row.^2;
+        Kfs(Kfs<0) = 0;
+        Kfs=mean(Kfs(:));
 end

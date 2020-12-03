@@ -1,30 +1,31 @@
 %% Goal :Determine the  noise characteristics of the whole system 
-function p = estimate_var(nd,vard,Nd,sample_path)
-%% Get all the variance results
-% sample_path need to be defined in main program
-for number =1:n
-    number
-    sample_path1 = sample_path(number);
-    I_static1 = read_raw(sample_path1);%%Read Data
-    I_static2 = I_static1([y1:y2 x1:x2]);% Determination area
-%% invoke function of ‘estimate_var2’
-    [varc,varc2_c] = estimate_var2(I_static2(:,:,:), nd, vard, Nd);%Obtain variance 
-    Ist(number,:) = mean(I_static2(:));
-    var(number,:) = varc2_c;
+function [pvar_s,pvar_t] = estimate_var(nd,vard,Nd,sample_path,x1,x2,y1,y2)  % Get all the variance results
+for number = 1:length(sample_path)   
+    I_static1 = read_raw(char(sample_path(number)));%% Read Data
+    I_static2 = I_static1(y1:y2,x1:x2,:);% Determination area
+    [var_t,var_s] = estimate_var2(I_static2, nd, vard, Nd,x1,x2,y1,y2);%Obtain variance 
+    Ist(number) = mean(I_static2(:)); 
+    var_S(number,:) = var_s;
+    var_T(number) = var_t;  
 end
-%% Fitting the curve parameters of variance under different steps(Δ)
-for number = 1:n
-    p1(:,number) = polyfit(1:1:20,var(number,1:1:20),3);
+
+% Fitting the curve parameters of variance and get the variance value when the step size (��) = 0 under spatial method
+for number = 1:length(sample_path)
+    Poly_S (:,number) = polyfit(1:1:20,var_S(number,1:1:20),1);  
 end
-tt1 = [];
-%%  x is the reasonable value of the actual step(Δ)
-for number=1:n
-    tt1 = [ tt1 polyval(p(:,number),x)];
+    tt1 = [];
+for number=1:length(sample_path)
+    tt1 = [ tt1 polyval(Poly_S(:,number),0)];
 end
-tt2 = [Ist(1:end)];
-tt2 = sortrows([tt1;tt2']',2);
-%% Observe raw data
-plot(tt2(:,2), tt2(:,1),'*')
-%% Fitting the system noise characteristics
-p = polyfit(tt2(1:n,2),tt2(1:n,1),2);
+%% Fitting the system noise characteristics 
+
+    tt = [Ist(Ist~=0)];
+    var_T = [var_T(Ist~=0)];
+    tt2 = sortrows([tt1;tt]',2); 
+    tt3 = sortrows([var_T;tt]',2);
+%   Observe raw data
+    plot(tt2(:,2), tt2(:,1),'-*') 
+    plot(tt3(:,2), tt3(:,1),'-*') 
+    pvar_s = polyfit(tt2(:,2),tt2(:,1),1);  
+    pvar_t = polyfit(tt3(:,2),tt3(:,1),1);
 end

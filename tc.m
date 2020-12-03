@@ -1,11 +1,17 @@
-%% Goal :Determine the decorrelation time, Ï„_{c}
+%% Goal :Determine the decorrelation time, ¦Ó_{c}
+function X = tc(Kfs,beta,row,T)
+%% the final x1 represent ¦Ó_{c},T is exposure time
 
-function x1 = tc(kfs,beta,row,T)
-%% x represent Ï„_{c},T is exposure time
-  err =(kfs-hx(T./x,beta,row)).^2;
-x1=solve(err,x)
+    err = @(x) (Kfs - beta*(exp(-2*x)-1+2*x)/2/x.^2+4*beta*(1/row-1)*(exp(-x)-1+x)/x.^2).^2 ;
+    best = 999;
+for p = 1   
+    [x,v,flag] = fminsearch(err,p);
+    if v < best
+       best=v; xopt=x; flagopt = flag ;g = p;
+    end
+      flagopt
 end
-%% The Relation between Kf^{2} and the decorrelation time Ï„_{c}ï¼Œx1=T/Ï„_{c}
-function X = hx(x1,beta,row,noise)
-X = beta*(exp(-2*x1)-1+2*x1)/2./x1.^2+4*beta*(1./row-1)*(exp(-x1)-1+x1)./x1.^2;
+x= xopt./T;
+X = [x,v,g]
+
 end
